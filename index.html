@@ -56,7 +56,7 @@
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mb-1 ">
-                <input type="text" id="apiKey" value="" class="form-control" placeholder="Paste your openAI apiKey here...">
+                <input type="text" id="apiKey" value="" class="form-control" size="54" placeholder="Paste your openAI apiKey here...">
             </ul>
         </div>
 	</nav>
@@ -98,7 +98,13 @@
 function clearContent(){
     document.getElementById('chatbox').innerHTML = '';
 }
-	
+
+const url = new URL(window.location.href);
+const key = url.searchParams.get('key');
+    if (key) {
+            $("#apiKey").val(key);
+            $("#apiKey").hide();
+    }	
 const chatbox = $("#chatbox");
 const userInput = $("#userInput");
 const sendButton = $("#sendButton");
