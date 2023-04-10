@@ -10,11 +10,19 @@
 	<script src="https://cdn.staticfile.org/jquery/3.6.3/jquery.min.js"></script>
 	<script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
 	<style>
+	
 		.chat-box {
-			height: 67vh;
-			overflow-y: scroll;
+		  height: calc(100vh - 238px); /* subtract the space occupied by the navbar and footer */
+		  overflow-y: scroll;
 		}
-
+		
+		@media only screen and (max-width: 480px) {
+		  .chat-box {
+			height: calc(100vh - 275px); /* adjust the height value as per your requirement */
+			overflow-y: scroll;
+		  }
+		}
+		
 		.message {
 			margin-bottom: 10px;
 			padding: 10px;
@@ -47,11 +55,100 @@
 			font-size: 16px;
 			display: none;
 		}
+		
+		/* Toggle Switch */
+
+		.switch {
+		  position: relative;
+		  display: inline-block;
+		  width: 60px;
+		  height: 34px;
+		}
+		.switch input {
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+		.slider {
+		  position: absolute;
+		  cursor: pointer;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  background-color: #ccc;
+		  transition: .4s;
+		}
+		.slider:before {
+		  position: absolute;
+		  content: "";
+		  height: 26px;
+		  width: 26px;
+		  left: 4px;
+		  bottom: 4px;
+		  background-color: white;
+		  transition: .4s;
+		}
+		input:checked + .slider {
+		  background-color: #333;
+		}
+		input:checked + .slider:before {
+		  transform: translateX(26px);
+		}
+		.slider.round {
+		  border-radius: 34px;
+		}
+		.slider.round:before {
+		  border-radius: 50%;
+		}
+
+
+		/* Dark Theme */
+		.dark-mode .dark-theme {
+		  background-color: #333;
+		  color: #fff;
+		}
+
+		.dark-mode .nav{
+		  background-color: #333;
+		  color: #fff;
+		}
+
+		.dark-mode .dark-text {
+		  color: #fff;
+		}
+
+		.dark-mode .card {
+		  background-color: #333;
+		  color: #fff;
+		}
+
+		.dark-mode .popup {
+		  background-color: #fff;
+		  color: #333;
+		}
+
+		.dark-mode .fa-clipboard {
+		  color: #212529;
+		  background-color: #7cc;
+		  border-color: #5bc2c2
+		}
+
+		.dark-mode .fa-clipboard:hover {
+		  color: #212529;
+		  background-color: #52bebe;
+		  border-color: #8ad3d3
+		}
+
+		.bg-skyblue{
+		background-color: #e3f2fd;
+		}
+
 </style>
 </head>
-<body class="bg-secondary">
-	<nav class="navbar navbar-expand-lg navbar-light sticky-top top-0 shadow py-0" style="background-color: #e3f2fd;">
-		<a class="navbar-brand logo pl-4" href="#">
+<body class=" bg-secondary">
+	<nav class="navbar navbar-expand-lg navbar-light sticky-top top-0 shadow py-0 bg-skyblue dark-theme">
+		<a class="navbar-brand logo pl-4 dark-text" href="#">
 			 <h3>GPT-3.5-Turbo</h3>
 		</a>
 		<a href="https://github.com/ab007shetty" target="blank" class="github-corner" aria-label="View source on GitHub">
@@ -68,20 +165,28 @@
 
         <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0 mb-1 ">
-                <input type="text" id="apiKey" value="" class="form-control" size="54" placeholder="Paste your openAI apiKey here...">
+                 <li class="nav-item">
+					<div class="d-flex align-items-center">
+						<input type="text" id="apiKey" value="" class="form-control mr-1 dark-theme" size="55" placeholder="Paste your openAI apiKey here...">
+						<label class="switch mb-0 pl-5">
+							<input type="checkbox" id="darkModeToggle" >
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</li>
             </ul>
         </div>
 	</nav>
 	<div class="container-fluid">
-		<div class="row">
+		<div class="row ">
 			<div class="col-md-12 mb-3">
-				<div class="card text-white bg-gradient-secondary mt-3">
+				<div class="card mt-3">
 					<div class="card-header row">
-						<div class="col-6 text-dark">
+						<div class="col-6 ">
 							<h3>Chat GPT</h3>						
 						</div>					
 						<div class="col-6 offset-md-3 col-md-3 text-right">	
-							<a  type="button" onclick="window.print()" class="btn  btn-outline-dark">Print</a>						
+							<a  type="button" onclick="window.print()" class="btn  btn-outline-info">Print</a>						
 							<a  type="button" class="btn btn-outline-danger " onclick="clearContent()">Clear</a>
 						</div>
 					</div>
@@ -89,10 +194,10 @@
 					<div class="card-footer">
 						<div class="form-group row">
 							<div class="col-md-10 mb-1">
-								<textarea id="userInput" rows="1" class="form-control text-dark" placeholder="Type your message here..." ></textarea>
+								<textarea id="userInput" rows="1" class="form-control dark-theme" placeholder="Type your message here..." ></textarea>
 							</div>
 							<div class="col-md-2">
-								<input id="sendButton" type="button" value="SUBMIT" class=" form-control btn btn-success btn-block" />
+								<input id="sendButton" type="button" value="SUBMIT" class=" form-control btn btn-success btn-block " />
 							</div>	
 						</div>
 					</div>
@@ -101,7 +206,20 @@
 		</div>
 	</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script>
+const toggleSwitch = document.querySelector('#darkModeToggle');
+toggleSwitch.addEventListener('change', switchTheme);
+
+function switchTheme(event) {
+  if (event.target.checked) {
+    document.body.classList.add('dark-mode');
+	document.nav.classList.remove('bg-skyblue');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }   
+}
+</script>	
 <script>
 function clearContent(){
     document.getElementById('chatbox').innerHTML = '';
@@ -213,5 +331,5 @@ function fetchMessages() {
 			chatbox.animate({ scrollTop: 20000000 }, "slow");
         });
     }
- </script>
+</script>
 </html>
