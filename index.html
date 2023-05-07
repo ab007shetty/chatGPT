@@ -324,12 +324,12 @@ function fetchMessages() {
             sendButton.val("SUBMIT");
             sendButton.prop("disabled", false);
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            sendButton.val("Error");
-			let errorText = 'Please provide chatGPT apiKey and try again.';
+			sendButton.val("Error");
+			let errorText = "Error: " + jqXHR.responseJSON.error.message;
 			let errorMessage = '<pre><div class="message left-side  text-danger" >' + errorText + '</div></pre>';
-            chatbox.append(errorMessage);
+			chatbox.append(errorMessage);
 			chatbox.animate({ scrollTop: 20000000 }, "slow");
-        });
+		});
     }
 </script>
 </html>
